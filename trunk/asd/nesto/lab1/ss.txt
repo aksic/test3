@@ -1,0 +1,128 @@
+
+SecurityCotextHolder: 
+	This is where we store details of the present security context of the application, which includes details of the principal currently using the application.
+
+Authentication:
+	Spring Security uses an Authentication object to represent this information form SecurityContexHolder(UserDetails).
+
+UserDetails:
+	It represents a principal, but in an extensible and application-specific way. Think of UserDetails as the adapter between your own user database and what Spring Security needs inside the SecurityContextHolder.
+
+UserDetailsService:
+	There is a special interface called UserDetailsService. The only method on this interface accepts a String-based username argument and returns a UserDetails:
+	----UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;----
+
+Just to recap:
+	-SecurityContextHolder, to provide access to the SecurityContext.
+	-SecurityContext, to hold the Authentication and possibly request-specific security information.
+	-Authentication, to represent the principal in a Spring Security-specific manner.
+	-GrantedAuthority, to reflect the application-wide permissions granted to a principal.
+	-UserDetails, to provide the necessary information to build an Authentication object from your application’s DAOs or other source of security data.
+	-UserDetailsService, to create a UserDetails when passed in a String-based username (or 	certificate ID or the like).
+
+UsernamePasswordAuthenticationToken:
+	The username and password are obtained and combined into an instance of UsernamePasswordAuthenticationToken (an instance of the Authentication interface.
+
+AuthenticationManager:
+	AuthenticationManager is used to validate UsernamePsswordAuthenticationToke.
+
+SecurityContextPersistenceFilter:
+	Stores the context as an httpSession and then It restores the context to the SecurityContextHolder for each request.
+
+ProviderManager:
+	Clear any sensitive credentials information from the Authentication object which is returned by a successful authentication request. This prevents information like passwords being retained longer than necessary.
+
+AuthenticatedVoter:
+	The current Authentication will be inspected to determine if the principal has a particular level of authentication. The "FULLY" authenticated option means the user is authenticated fully (provera da li korisnik ima neohodnu "rolu")
+
+AffirmativeBased:
+	Grants access if any AccessDecisionVoter voted affirmatively. Denies access only if there was a deny vote AND no affirmative votes.
+(pokupi poruku od AuthenticatedVoter i ako je affirmative pusti korisnika)
+
+RoleVoter:
+	The default prefix string is ROLE_, but this may be overridden to any value. It may also be set to empty, which means that essentially any attribute will be voted on
+(sluzi za definisanje kastom role, default prefiks je ROLE_)
+
+form login:
+Used to add an UsernamePasswordAuthenticationFilter to the filter stack and an LoginUrlAuthenticationEntryPoint to the application context to provide authentication on demand  If no attributes are supplied, a login page will be generated automatically at the URL "/login".
+	-always use default target:
+		Always-use-default-target If set to true, the user will always start at the value given by default-target-url, regardless of how they arrived at the login page
+	-authentication failure url
+	-authentication success handler 
+	-default target url
+	-login page
+	-login processing url Maps to the filterProcessesUrl property of UsernamePasswordAuthenticationFilter. The default value is "/login" (j_spring_security_logout).
+	-password parameter The name of the request parameter
+	-username parameter The name of the request parameter
+
+intercept url: 
+	-access 
+	-pattern
+logout success url:
+csrf:
+<http>:
+	If you use an <http> element within your application, a FilterChainProxy bean named "springSecurityFilterChain" is created.
+
+AccessDecisionManager:
+	AccessDecisionManager is automatically registered for you and will be used for making access decisions for method invocations and web URL access, based on the access attributes you specify in your intercept-url and protect-pointcut declarations.
+
+	Properties prop = new Properties();
+	InputStream input = null;
+// Properties prop = new Properties();
+		// InputStream input = null;
+		// try {
+		//
+		//// input = new FileInputStream("user.properties");
+		// prop.load(this.getClass().getResourceAsStream("user.properties"));
+		//
+		//
+		//
+		// } catch (IOException ex) {
+		// ex.printStackTrace();
+		// } finally {
+		// if (input != null) {
+		// try {
+		// input.close();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// LOGGER.info("----" + prop.getProperty(username) + "-----");
+		//
+		// }
+
+
+
+//		String pom = null;
+//		if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains("ROLE_ADMIN")) {
+//			pom = "helo";
+//		} else {
+//			pom = "helloAdmin";
+//		}
+//		return pom;
+		
+
+	
+//		List<Model> lista = new ArrayList<Model>();
+//		lista.add(new Model(0, "name"));
+//		ModelList ml = new ModelList(lista);
+//
+//		try {
+//			File file = new File("/home/emisia/Desktop/Model.xml");
+//
+//			String pom=file.getAbsolutePath();
+//			log.info("--"+file.getAbsolutePath());
+//			JAXBContext jc = JAXBContext.newInstance(ModelList.class);
+//
+//			Marshaller marshaller = jc.createMarshaller();
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//			marshaller.marshal(ml, file);
+//
+//		} catch (PropertyException e) {
+//			e.printStackTrace();
+//		} catch (JAXBException e) {
+//			e.printStackTrace();
+//		}
+
+
+ 
